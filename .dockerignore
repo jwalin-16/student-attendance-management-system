@@ -1,0 +1,10 @@
+node_modules
+dist
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+.git
+.vscode
+tests/__pycache__
+*.log

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: college-attendance-deployment
+  labels:
+    app: college-attendance-system
+spec:
+  replicas: 1  # SQLite file storage requires single replica with RWO volume
+  selector:
+    matchLabels:
+      app: college-attendance-system
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: college-attendance-system
+    spec:
+      containers:
+        - name: attendance-app
+          image: college-attendance-system:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: sqlite-storage
+              mountPath: /app/data
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      volumes:
+        - name: sqlite-storage
+          persistentVolumeClaim:
+            claimName: attendance-data-pvc

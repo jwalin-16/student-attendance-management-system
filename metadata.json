@@ -1,0 +1,6 @@
+{
+  "name": "College Student Attendance Management System",
+  "description": "A comprehensive college student attendance tracking system featuring 7-period daily marking, monthly analytics, <75% attendance alerts, student directory, and CSV reports with persistent SQLite storage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
